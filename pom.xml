@@ -3,7 +3,7 @@
   <groupId>com.brotherlogic.util</groupId>
   <artifactId>configstore</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.1</version>
+  <version>0.1.2-SNAPSHOT</version>
   <name>configstore</name>
   <url>http://maven.apache.org</url>
   <dependencies>
