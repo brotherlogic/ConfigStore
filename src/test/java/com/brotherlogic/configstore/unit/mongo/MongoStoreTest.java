@@ -1,4 +1,4 @@
-package com.brotherlogic.configstore.mongo;
+package com.brotherlogic.configstore.unit.mongo;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.brotherlogic.configstore.ConfigStore;
+import com.brotherlogic.configstore.mongo.MongoConfig;
 import com.mongodb.Mongo;
 
 /**
