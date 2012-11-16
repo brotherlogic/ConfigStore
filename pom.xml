@@ -2,16 +2,29 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.brotherlogic.util</groupId>
   <artifactId>configstore</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <version>0.1.3-SNAPSHOT</version>
   <name>configstore</name>
   <url>http://maven.apache.org</url>
+
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11-beta-1</version>
+      <version>4.11</version>
       <scope>test</scope>
+    </dependency>
+
+    <!-- Servlet Stuff -->
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- For interfacing with mongo -->
@@ -45,6 +58,7 @@
   
     <pluginManagement>
       <plugins>
+
   	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-compiler-plugin</artifactId>
@@ -60,7 +74,87 @@
           <artifactId>maven-release-plugin</artifactId>
           <version>2.1</version>
 	</plugin>
+
+	<plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.12.4</version>
+          <configuration>
+            <excludes>
+              <exclude>**/integration/**/*.java</exclude>
+            </excludes>
+          </configuration>
+	</plugin>
+
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.12.4</version>
+	  <configuration>
+            <includes>
+              <include>**/integration/**/*.java</include>
+            </includes>
+          </configuration>
+	  <executions>
+	    <execution>
+              <id>integration-test</id>
+              <goals>
+		<goal>integration-test</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>verify</id>
+              <goals>
+		<goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+	</plugin>
 	
+	<plugin>
+          <groupId>org.mortbay.jetty</groupId>
+          <artifactId>maven-jetty-plugin</artifactId>
+          <version>7.0.0.pre5</version>
+          <configuration>
+            <scanIntervalSeconds>10</scanIntervalSeconds>
+            <stopPort>8005</stopPort>
+            <stopKey>STOP</stopKey>
+            <contextPath>/</contextPath>
+          </configuration>
+          <executions>
+            <execution>
+              <id>start-jetty</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+		<goal>run</goal>
+              </goals>
+              <configuration>
+		<scanIntervalSeconds>0</scanIntervalSeconds>
+		<daemon>true</daemon>
+              </configuration>
+            </execution>
+            <execution>
+              <id>stop-jetty</id>
+              <phase>post-integration-test</phase>
+              <goals>
+		<goal>stop</goal>
+              </goals>
+            </execution>
+          </executions>
+	</plugin>
+
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-war-plugin</artifactId>
+	  <configuration>
+	    <webResource>
+	      <resource>
+		<directory>src/main/java</directory>
+		<targetPath>/</targetPath>
+	      </resource>
+	    </webResource>
+	  </configuration>
+	</plugin>
       </plugins>
     </pluginManagement>
   </build>
