@@ -23,8 +23,8 @@
     <dependency>
       <groupId>javax.servlet.jsp</groupId>
       <artifactId>jsp-api</artifactId>
-      <version>2.5</version>
-      <scope>test</scope>
+      <version>2.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- For interfacing with mongo -->
