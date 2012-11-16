@@ -1,5 +1,7 @@
 package com.brotherlogic.configstore;
 
+import java.io.IOException;
+
 /**
  * Interface for defininig a config store
  * 
@@ -13,9 +15,11 @@ public interface ConfigStore
     * 
     * @param key
     *           The key to get information for
+    * @throws IOException
+    *            if something goes wrong in retrieving
     * @return a byte array
     */
-   byte[] get(String key);
+   byte[] get(String key) throws IOException;
 
    /**
     * Store method for config
@@ -24,6 +28,8 @@ public interface ConfigStore
     *           The key to store information under
     * @param value
     *           The information to be stored
+    * @throws IOException
+    *            If something goes wrong in storage
     */
-   public void store(String key, byte[] value);
+   void store(String key, byte[] value) throws IOException;
 }
