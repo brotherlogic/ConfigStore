@@ -80,8 +80,19 @@ public class MongoConfig implements ConfigStore
    {
       BasicDBObject store = new BasicDBObject();
       store.append("key", key);
-      store.append("value", value);
-      connect().insert(store);
+
+      DBObject obj = connect().findOne(store);
+
+      if (obj != null)
+      {
+         obj.put("value", value);
+         connect().update(store, obj);
+      }
+      else
+      {
+         store.append("value", value);
+         connect().insert(store);
+      }
    }
 
 }
