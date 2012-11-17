@@ -3,6 +3,8 @@ package com.brotherlogic.configstore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,8 @@ import com.brotherlogic.configstore.mongo.MongoConfig;
 
 public class Front extends HttpServlet
 {
+   Logger logger = Logger.getLogger(this.getClass().getName());
+
    ConfigStore store = null;
 
    private ConfigStore getConfigStore()
@@ -30,6 +34,8 @@ public class Front extends HttpServlet
       String key = req.getParameter("key");
       byte[] content = getConfigStore().get(key);
 
+      logger.log(Level.INFO, "Getting " + key);
+
       PrintStream bos = new PrintStream(resp.getOutputStream());
       bos.write(content);
       bos.close();
@@ -41,6 +47,7 @@ public class Front extends HttpServlet
    {
       // Get the key
       String key = req.getParameter("key");
+      logger.log(Level.INFO, "Putting " + key);
       InputStream is = req.getInputStream();
       byte[] inputData = new byte[is.available()];
       is.read(inputData);

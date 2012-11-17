@@ -57,4 +57,21 @@ public class MongoStoreTest
 
       Assert.assertEquals("Mismatch in retrieved data: " + strRet + " vs " + data, strRet, data);
    }
+
+   @Test
+   public void testOverwrite() throws IOException
+   {
+      String key = "test.key";
+      String data = "Test data";
+
+      conf.store(key, data.getBytes());
+
+      String data2 = "Test data 2";
+      conf.store(key, data2.getBytes());
+
+      byte[] dateRet = conf.get(key);
+      String strRet = new String(dateRet);
+
+      Assert.assertEquals("Data not overwritten", data2, strRet);
+   }
 }

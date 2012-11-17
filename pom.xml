@@ -143,6 +143,12 @@
               <configuration>
 		<scanIntervalSeconds>0</scanIntervalSeconds>
 		<daemon>true</daemon>
+		<systemProperties>
+		  <systemProperty>
+		    <name>configstore.test</name>
+		    <value>true</value>
+		  </systemProperty>
+		</systemProperties>
               </configuration>
             </execution>
             <execution>

@@ -43,7 +43,7 @@ public class MongoConfig implements ConfigStore
       if (collection == null)
       {
          Mongo mongo = new Mongo();
-         if (!testMode)
+         if (!testMode && System.getProperty("configstore.test") == null)
             collection = mongo.getDB(DB_NAME).getCollection(COL_NAME);
          else
             collection = mongo.getDB(TEST_DB_NAME).getCollection(COL_NAME);
@@ -80,8 +80,19 @@ public class MongoConfig implements ConfigStore
    {
       BasicDBObject store = new BasicDBObject();
       store.append("key", key);
-      store.append("value", value);
-      connect().insert(store);
+
+      DBObject obj = connect().findOne(store);
+
+      if (obj != null)
+      {
+         obj.put("value", value);
+         connect().update(store, obj);
+      }
+      else
+      {
+         store.append("value", value);
+         connect().insert(store);
+      }
    }
 
 }
