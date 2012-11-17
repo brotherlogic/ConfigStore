@@ -43,7 +43,7 @@ public class MongoConfig implements ConfigStore
       if (collection == null)
       {
          Mongo mongo = new Mongo();
-         if (!testMode)
+         if (!testMode && System.getProperty("configstore.test") == null)
             collection = mongo.getDB(DB_NAME).getCollection(COL_NAME);
          else
             collection = mongo.getDB(TEST_DB_NAME).getCollection(COL_NAME);
