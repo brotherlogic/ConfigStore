@@ -1,5 +1,6 @@
 package com.brotherlogic.configstore;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -34,7 +35,7 @@ public class Front extends HttpServlet
       String key = req.getParameter("key");
       byte[] content = getConfigStore().get(key);
 
-      logger.log(Level.INFO, "Getting " + key);
+      logger.log(Level.INFO, "Getting " + key + "->" + new String(content));
 
       PrintStream bos = new PrintStream(resp.getOutputStream());
       bos.write(content);
@@ -47,13 +48,20 @@ public class Front extends HttpServlet
    {
       // Get the key
       String key = req.getParameter("key");
-      logger.log(Level.INFO, "Putting " + key);
       InputStream is = req.getInputStream();
-      byte[] inputData = new byte[is.available()];
-      is.read(inputData);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte[] buffer = new byte[1024];
+      int read = is.read(buffer);
+      while (read > 0)
+      {
+         baos.write(buffer, 0, read);
+         read = is.read(buffer);
+      }
       is.close();
 
+      byte[] inputData = baos.toByteArray();
+      baos.close();
+      logger.log(Level.INFO, "Putting " + key + "->" + new String(inputData));
       getConfigStore().store(key, inputData);
    }
-
 }
