@@ -74,4 +74,11 @@ public class MongoStoreTest
 
       Assert.assertEquals("Data not overwritten", data2, strRet);
    }
+
+   @Test
+   public void testEmpty() throws IOException
+   {
+      byte[] dataRet = conf.get("blah");
+      Assert.assertTrue("Data Ret has data? " + dataRet.length, dataRet.length == 0);
+   }
 }
