@@ -20,26 +20,54 @@ public class Front extends HttpServlet
 
    ConfigStore store = null;
 
-   private ConfigStore getConfigStore()
-   {
-      if (store == null)
-         store = new MongoConfig();
-      return store;
-   }
-
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
          IOException
    {
-      resp.setContentType("application/octet-stream");
+      String key = null;
+
+      if (req != null)
+         key = req.getParameter("key");
+
+      if (key == null)
+      {
+         resp.setContentType("text/html");
+
+         // Display all the keys
+         PrintStream ps = new PrintStream(resp.getOutputStream());
+         ps.println("<HTML><BODY>");
+
+         ps.println("<FORM action=\"/\" method=\"post\"><LABEL>Key:</LABEL><INPUT NAME=\"key\" TYPE=\"text\" /><LABEL>Value:</LABEL><INPUT NAME=\"value\" TYPE=\"text\" /><INPUT TYPE=\"submit\"/></FORM>");
+
+         for (String storeKey : getConfigStore().getKeys())
+            ps.println("<P>" + storeKey + "</P>");
+
+         ps.println("</BODY></HTML>");
+      }
+      else
+      {
+         resp.setContentType("application/octet-stream");
+
+         byte[] content = getConfigStore().get(key);
+
+         logger.log(Level.INFO, "Getting " + key + "->" + new String(content));
+
+         PrintStream bos = new PrintStream(resp.getOutputStream());
+         bos.write(content);
+         bos.close();
+      }
+   }
+
+   @Override
+   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+         IOException
+   {
       String key = req.getParameter("key");
-      byte[] content = getConfigStore().get(key);
+      String value = req.getParameter("value");
 
-      logger.log(Level.INFO, "Getting " + key + "->" + new String(content));
+      getConfigStore().store(key, value.getBytes());
 
-      PrintStream bos = new PrintStream(resp.getOutputStream());
-      bos.write(content);
-      bos.close();
+      doGet(null, resp);
    }
 
    @Override
@@ -63,5 +91,12 @@ public class Front extends HttpServlet
       baos.close();
       logger.log(Level.INFO, "Putting " + key + "->" + new String(inputData));
       getConfigStore().store(key, inputData);
+   }
+
+   private ConfigStore getConfigStore()
+   {
+      if (store == null)
+         store = new MongoConfig();
+      return store;
    }
 }
