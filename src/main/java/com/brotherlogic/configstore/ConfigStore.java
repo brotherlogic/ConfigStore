@@ -1,6 +1,7 @@
 package com.brotherlogic.configstore;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Interface for defininig a config store
@@ -32,4 +33,6 @@ public interface ConfigStore
     *            If something goes wrong in storage
     */
    void store(String key, byte[] value) throws IOException;
+   
+   List<String> getKeys() throws IOException;
 }

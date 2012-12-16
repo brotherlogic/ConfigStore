@@ -14,7 +14,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.brotherlogic.configstore.WebInterface;
 
 public class MongoIntegrationTest
 {
@@ -44,24 +43,5 @@ public class MongoIntegrationTest
 
       String retString = new String(buffer, 0, read);
       Assert.assertEquals("String retrieved incorrectly", toStore, retString);
-   }
-
-   @Test
-   public void testWebInterface() throws IOException
-   {
-      WebInterface inter = new WebInterface("http://localhost:8080/configstore/");
-      String testString = "donkey";
-      inter.store("mirror2", testString.getBytes());
-      byte[] retr = inter.get("mirror2");
-      String retString = new String(retr);
-      Assert.assertEquals("String retrieved incorrectly", testString, retString);
-   }
-
-   @Test
-   public void testWebInterfaceFail() throws IOException
-   {
-      WebInterface inter = new WebInterface("http://localhost:8080/configstore/");
-      byte[] retr = inter.get("mirror4");
-      Assert.assertTrue("Error in retrieve", retr.length == 0);
    }
 }

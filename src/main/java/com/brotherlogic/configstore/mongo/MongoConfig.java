@@ -1,10 +1,13 @@
 package com.brotherlogic.configstore.mongo;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.brotherlogic.configstore.ConfigStore;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 
@@ -16,7 +19,22 @@ import com.mongodb.Mongo;
  */
 public class MongoConfig implements ConfigStore
 {
-   /** The name of the collection where we'll store stuff */
+   @Override
+	public List<String> getKeys() throws IOException {
+		
+	   connect();
+	   
+	   List<String> keys = new LinkedList<String>();
+	   
+	   DBCursor cursor = collection.find();
+	   while(cursor.hasNext())
+		   keys.add((String)cursor.next().get("key"));
+	   
+	   return keys;
+	   
+	}
+
+/** The name of the collection where we'll store stuff */
    private static final String COL_NAME = "Config";
 
    /** The name of the database where we'll store stuff */
