@@ -37,7 +37,7 @@ public class Front extends HttpServlet
          PrintStream ps = new PrintStream(resp.getOutputStream());
          ps.println("<HTML><BODY>");
 
-         ps.println("<FORM action=\"/\" method=\"post\"><LABEL>Key:</LABEL><INPUT NAME=\"key\" TYPE=\"text\" /><LABEL>Value:</LABEL><INPUT NAME=\"value\" TYPE=\"text\" /><INPUT TYPE=\"submit\"/></FORM>");
+         ps.println("<FORM action=\"./\" method=\"post\"><LABEL>Key:</LABEL><INPUT NAME=\"key\" TYPE=\"text\" /><LABEL>Value:</LABEL><INPUT NAME=\"value\" TYPE=\"text\" /><INPUT TYPE=\"submit\"/></FORM>");
 
          for (String storeKey : getConfigStore().getKeys())
             ps.println("<P>" + storeKey + "</P>");
